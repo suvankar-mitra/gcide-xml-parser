@@ -66,9 +66,9 @@ public class XmlProcessor {
                 // pre processing to ignore some tags
                 pTagContent = pTagContent
                         .replaceAll("(?s)<!--.*?-->", "") // remove all the comments
-                        .replaceAll("(?i)<br\\s*/?>", "\n")
                         .replaceAll("<\\?/", "")// replace all (<?/) with ''
-                        .replaceAll("<(\\w+)/", "<$1/>") // replace all <acr/ like patterns with {acr/
+                        .replaceAll("<(\\w+)/", "{$1/}") // replace all <acr/ like patterns with /{acr/}
+                        .replaceAll("(?i)\\{br\\s*/?}", "")
                         .replaceAll("&(?!\\w+;)", "&amp;") // ignore & characters
                         .replaceAll("<cs>", "").replaceAll("</cs>", "")
                         .replaceAll("<note>", "").replaceAll("</note>", "")
