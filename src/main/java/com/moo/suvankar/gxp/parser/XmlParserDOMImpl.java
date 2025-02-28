@@ -86,7 +86,7 @@ public class XmlParserDOMImpl implements XmlParser {
                 String synTokenValue = document.getElementsByTagName("syn").item(0).getTextContent().replaceAll("\n", " ");
 
                 //ignore Syn. --
-                synTokenValue = synTokenValue.replaceAll("Syn. -- ", "").replaceAll(" ", "");
+                synTokenValue = synTokenValue.replaceAll("Syn. -- ", "");
 
                 entry.getSynonym().getSynonymList().addAll(List.of(synTokenValue.split(",")));
             }
@@ -216,10 +216,9 @@ public class XmlParserDOMImpl implements XmlParser {
 
                 //ignore Syn. --
                 synTokenValue = synTokenValue.replaceAll("Syn. -- ", "")
-                        .replaceAll(" ", "")
                         .replaceAll("\\.", "");
 
-                entry.getSynonym().getSynonymList().addAll(List.of(synTokenValue.split(";")));
+                entry.getSynonym().getSynonymList().addAll(List.of(synTokenValue.split("; ")));
 
                 if (document.getElementsByTagName("source").getLength() > 0) {
                     entry.getSynonym().setSource(document.getElementsByTagName("source").item(0)
