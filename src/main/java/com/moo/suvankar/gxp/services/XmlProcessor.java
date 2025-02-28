@@ -5,7 +5,6 @@ import com.moo.suvankar.gxp.parser.XmlParser;
 import com.moo.suvankar.gxp.utils.FileReaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,7 +22,6 @@ public class XmlProcessor {
     private final XmlParser xmlParser;
     private final DictionaryEntryService dbService;
 
-    @Autowired
     public XmlProcessor(XmlParser xmlParser,
                         DictionaryEntryService dbService) {
         this.xmlParser = xmlParser;
