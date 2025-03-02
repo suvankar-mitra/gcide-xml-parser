@@ -3,7 +3,7 @@ spring:
   application:
     name: gcide-xml-parser
   profiles:
-    active: h2  # Default profile
+    active: sqlite  # Default profile
 
 ---
 # H2 profile-specific properties
