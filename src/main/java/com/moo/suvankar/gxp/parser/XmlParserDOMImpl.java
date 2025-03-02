@@ -22,7 +22,7 @@ import java.util.Locale;
 @Component("xmlParserDOMImpl")
 public class XmlParserDOMImpl implements XmlParser {
 
-    private static Logger LOG = LoggerFactory
+    private static final Logger LOG = LoggerFactory
             .getLogger(XmlParserDOMImpl.class);
 
     @Override
@@ -86,7 +86,7 @@ public class XmlParserDOMImpl implements XmlParser {
                 String synTokenValue = document.getElementsByTagName("syn").item(0).getTextContent().replaceAll("\n", " ");
 
                 //ignore Syn. --
-                synTokenValue = synTokenValue.replaceAll("Syn. -- ", "");
+                synTokenValue = synTokenValue.replaceAll("Syn. --[ ]*", "");
 
                 entry.getSynonym().getSynonymList().addAll(List.of(synTokenValue.split(",")));
             }
