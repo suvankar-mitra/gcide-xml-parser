@@ -1,13 +1,29 @@
 package com.moo.suvankar.gxp;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
+import java.util.List;
+import java.util.Locale;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import com.moo.suvankar.gxp.data.DictionaryEntry;
+import com.moo.suvankar.gxp.repositories.DictionaryEntryRepository;
+
+@SpringBootTest(classes = GcideXmlParserApplication.class)
+@ActiveProfiles("test")
 class GcideXmlParserApplicationTests {
 
+	@Autowired
+	private DictionaryEntryRepository dictionaryEntryRepository;
+
 	@Test
-	void contextLoads() {
+	void testRetrieveDictionaryEntry() {
+
+		List<DictionaryEntry> entries = dictionaryEntryRepository.findByEntryWord("abandon");
+		assertEquals("abandon", entries.get(0).getEntryWord().toLowerCase(Locale.ENGLISH).trim());
 	}
 
 }

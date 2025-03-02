@@ -1,6 +1,5 @@
 package com.moo.suvankar.gxp;
 
-import com.moo.suvankar.gxp.services.DictionaryEntryService;
 import com.moo.suvankar.gxp.services.XmlProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,10 +17,14 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 @SpringBootApplication
+@EnableJpaRepositories(basePackages = "com.moo.suvankar.gxp.repositories")
 public class GcideXmlParserApplication implements CommandLineRunner {
 
 	private static Logger LOG = LoggerFactory
 			.getLogger(GcideXmlParserApplication.class);
+
+	@Autowired
+    private Environment environment;
 
 	@Autowired
 	private XmlProcessor xmlProcessor;
@@ -30,6 +35,19 @@ public class GcideXmlParserApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) {
+
+		// This will make sure that for 'test' profile, we do not parse all the xml files
+		if (environment.getActiveProfiles().length > 0) {
+			for (String profile : environment.getActiveProfiles()) {
+				if(profile.equals("test")) {
+					LOG.info("Test profile active, only processing CIDE.A.xml");
+					xmlProcessor.processAndPersistXml("CIDE.A.xml");
+					return;
+				}
+			}
+		} else {
+			LOG.info("No active profile, processing all CIDE.*.xml files");
+		}
 
 		// loop though all CIDE.*.xml files
 		Path directory = Paths.get("src/main/resources/GCIDE");
