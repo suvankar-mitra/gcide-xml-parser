@@ -20,4 +20,8 @@ public class Quote {
     @Column(length = 1000)
     private String author;
     private String source;
+
+    @ManyToOne
+    @JoinColumn(name = "dictionary_entry_id")
+    private DictionaryEntry dictionaryEntry;
 }

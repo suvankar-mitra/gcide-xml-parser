@@ -20,4 +20,8 @@ public class Definition {
 
     private String source;
     private String mark;
+
+    @ManyToOne
+    @JoinColumn(name = "dictionary_entry_id")
+    private DictionaryEntry dictionaryEntry;
 }

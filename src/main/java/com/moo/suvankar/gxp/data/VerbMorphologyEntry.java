@@ -20,4 +20,8 @@ public class VerbMorphologyEntry {
     @ElementCollection
     private List<String> partsOfSpeech = new LinkedList<>();
     private String conjugatedForm;
+
+    @ManyToOne
+    @JoinColumn(name = "dictionary_entry_id")
+    private DictionaryEntry dictionaryEntry;
 }
