@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collaborative International Dictionary of English) XML data** and store it in a **local H2 database** for efficient querying and usage.
+This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collaborative International Dictionary of English) XML data** and store it in a **local H2/SQLite database** for efficient querying and usage.
 
 ## Features
 
@@ -15,6 +15,7 @@ This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collabo
 
 - **Java** (JDK 11 or later)
 - **H2 Database** (for local storage)
+- **SQLite Database** (for local storage)
 - **DOM API** (for XML parsing)
 - **Spring Boot** (optional, for managing database interactions)
 
