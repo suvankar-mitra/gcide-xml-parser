@@ -36,17 +36,17 @@ This project is a **Java-based tool** designed to parse **GCIDE (The GNU Collabo
    ```
 2. Build the project using Maven or Gradle:
    ```sh
-   mvn clean install
-   ```
-   or
-   ```sh
-   ./gradlew build
+   mvnw clean install
    ```
 3. Run the application:
    ```sh
-   java -jar target/gcide-xml-parser.jar
+   mvnw spring-boot:run
    ```
-4. The data will be stored in an **H2 database file**, accessible via **JDBC URL**.
+4. The data will be stored in an **H2 database file** or **SQLite database file**, accessible via **JDBC URL**.
+
+### Example Screenshots of data (h2)
+![Alt text](screenshots/H2/jbbc-string.png?raw=true "JDBC connection")
+![Alt text](screenshots/H2/query-execution-output.png?raw=true "SQL execution")
 
 ## Database Schema
 
