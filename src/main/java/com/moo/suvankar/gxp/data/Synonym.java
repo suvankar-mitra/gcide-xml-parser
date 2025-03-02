@@ -13,7 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Synonym {
-    @CollectionTable(name = "synonyms", joinColumns = @JoinColumn(name = "entry_id"))
+    @ElementCollection 
+    @CollectionTable(name = "synonyms", joinColumns = @JoinColumn(name = "dictionary_entry_id"))
     @Column(name = "synonym", length = 5000)
     private List<String> synonymList = new LinkedList<>();
     private String source;
