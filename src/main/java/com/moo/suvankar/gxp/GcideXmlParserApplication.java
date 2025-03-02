@@ -24,9 +24,6 @@ public class GcideXmlParserApplication implements CommandLineRunner {
 	@Autowired
 	private XmlProcessor xmlProcessor;
 
-	@Autowired
-	private DictionaryEntryService entryService;
-
 	public static void main(String[] args) {
 		SpringApplication.run(GcideXmlParserApplication.class, args);
 	}
@@ -34,7 +31,7 @@ public class GcideXmlParserApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) {
 
-		// loop though all CIDE.* files
+		// loop though all CIDE.*.xml files
 		Path directory = Paths.get("src/main/resources/GCIDE");
 
 		try (Stream<Path> files = Files.list(directory)) {
@@ -47,13 +44,7 @@ public class GcideXmlParserApplication implements CommandLineRunner {
 		}
 
 
-//		xmlProcessor.processAndPersistXml("CIDE.W");
-//		xmlProcessor.processAndPersistXml("CIDE.X");
-//		xmlProcessor.processAndPersistXml("CIDE.Y");
-//		xmlProcessor.processAndPersistXml("CIDE.Z");
-//
-		entryService.findEntriesByWord("Stooge".toLowerCase()).forEach(System.out::println);
-		entryService.findEntriesByWord("1").forEach(System.out::println);
+		//  xmlProcessor.processAndPersistXml("CIDE.A.xml");
 	}
 
 }

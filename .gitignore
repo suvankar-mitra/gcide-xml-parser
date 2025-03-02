@@ -33,5 +33,7 @@ build/
 .vscode/
 
 
-### H2 database files ###
+### database files ###
 *.db
+*.sqlite
+*.sqlite-*
