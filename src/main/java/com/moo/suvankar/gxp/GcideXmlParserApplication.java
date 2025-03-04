@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 @EnableJpaRepositories(basePackages = "com.moo.suvankar.gxp.repositories")
 public class GcideXmlParserApplication implements CommandLineRunner {
 
-	private static Logger LOG = LoggerFactory
+	private static final Logger LOG = LoggerFactory
 			.getLogger(GcideXmlParserApplication.class);
 
 	@Autowired
