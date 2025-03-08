@@ -29,6 +29,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -115,7 +118,7 @@ public class XmlProcessor {
 
             LOG.info("Parsing of file {} is complete, now persisting into Database.", fileName);
             // parsing is done, now persist into database
-            saveIntoDatabase(dictionaryEntries);
+            saveIntoDatabaseMultiThread(dictionaryEntries);
 
             LOG.info("Database persist of {} complete.", fileName);
 
@@ -124,9 +127,22 @@ public class XmlProcessor {
         }
     }
 
-    private void saveIntoDatabase(List<DictionaryEntry> dictionaryEntries) {
+    private void saveIntoDatabaseMultiThread(List<DictionaryEntry> dictionaryEntries) {
+        int numberOfThreads = Runtime.getRuntime().availableProcessors();
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+
         for (DictionaryEntry entry : dictionaryEntries) {
-            dbService.save(entry);
+            executorService.submit(() -> dbService.save(entry));
+        }
+
+        executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(60, TimeUnit.MINUTES)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+            Thread.currentThread().interrupt();
         }
     }
 
