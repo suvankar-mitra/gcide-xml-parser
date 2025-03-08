@@ -46,8 +46,6 @@ public class DictionaryController {
 
         List<DictionaryEntry> dictionaryEntries = dictionaryEntryService.findEntriesByWord(word);
 
-        LOG.info("Found {} definitions for word {}", dictionaryEntries == null, word);
-
         if (dictionaryEntries == null || dictionaryEntries.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

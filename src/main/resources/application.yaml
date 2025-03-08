@@ -12,8 +12,8 @@ spring:
     activate:
       on-profile: h2
   datasource:
-    # url: jdbc:h2:file:./cidedb
-    url: jdbc:h2:mem:cidedb
+    url: jdbc:h2:file:./cidedb
+    # url: jdbc:h2:mem:cidedb
     driverClassName: org.h2.Driver
     username: sa
     password: 
@@ -23,7 +23,7 @@ spring:
       ddl-auto: none
   sql:
     init:
-      mode: always
+      mode: never
       data-locations:
       - classpath:schema-h2.sql
 
@@ -44,6 +44,6 @@ spring:
       ddl-auto: none
   sql:
     init:
-      mode: always
+      mode: never
       data-locations:
       - classpath:schema-sqlite.sql
