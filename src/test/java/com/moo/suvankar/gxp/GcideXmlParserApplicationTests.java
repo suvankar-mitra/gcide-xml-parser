@@ -28,6 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import com.moo.suvankar.gxp.data.DictionaryEntry;
 import com.moo.suvankar.gxp.repositories.DictionaryEntryRepository;
+import com.moo.suvankar.gxp.services.XmlProcessor;
 
 @SpringBootTest(classes = GcideXmlParserApplication.class)
 @ActiveProfiles("test")
@@ -36,8 +37,13 @@ class GcideXmlParserApplicationTests {
 	@Autowired
 	private DictionaryEntryRepository dictionaryEntryRepository;
 
+	@Autowired
+	private XmlProcessor xmlProcessor;
+
 	@Test
 	void testRetrieveDictionaryEntry() {
+
+		xmlProcessor.processAndPersistXml("CIDE.A.xml");
 
 		List<DictionaryEntry> entries = dictionaryEntryRepository.findByEntryWord("abandon");
 		assertEquals("abandon", entries.get(0).getEntryWord().toLowerCase(Locale.ENGLISH).trim());

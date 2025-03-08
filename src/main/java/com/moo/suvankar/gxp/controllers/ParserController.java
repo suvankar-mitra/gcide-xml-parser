@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.moo.suvankar.gxp.services.XmlProcessor;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,33 +18,34 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 @RequestMapping("/api/v1")
 public class ParserController {
 
     private static final Logger LOG = LoggerFactory
-			.getLogger(ParserController.class);
+            .getLogger(ParserController.class);
 
     @Autowired
-	private XmlProcessor xmlProcessor;
+    private XmlProcessor xmlProcessor;
 
     @GetMapping("/parse")
     public ResponseEntity<HttpStatus> parse(@RequestParam String file) {
-		Path directory = Paths.get("src/main/resources/GCIDE");
+        Path directory = Paths.get("src/main/resources/GCIDE");
 
-        if(file.equals("all")) {
-            // loop though all CIDE.*.xml files
-            try (Stream<Path> files = Files.list(directory)) {
-			files.filter(Files::isRegularFile)
-					.map(Path::getFileName)
-					.forEach(filePath -> xmlProcessor.processAndPersistXml(filePath.getFileName().toString()));
-            } catch (IOException e) {
-                LOG.error("Fatal error {}", e.getMessage());
-                throw new RuntimeException(e);
+        try {
+            if (file.equals("all")) {
+                // loop though all CIDE.*.xml files
+                try (Stream<Path> files = Files.list(directory)) {
+                    files.filter(Files::isRegularFile)
+                            .map(Path::getFileName)
+                            .forEach(filePath -> xmlProcessor.processAndPersistXml(filePath.getFileName().toString()));
+                }
+            } else {
+                xmlProcessor.processAndPersistXml(file);
             }
-        } else {
-            xmlProcessor.processAndPersistXml(file);
+        } catch (Exception e) {
+            LOG.error("Fatal error {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return ResponseEntity.ok(HttpStatus.OK);

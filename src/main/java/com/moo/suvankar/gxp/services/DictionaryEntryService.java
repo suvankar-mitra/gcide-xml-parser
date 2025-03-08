@@ -32,6 +32,8 @@ public class DictionaryEntryService {
     private final DictionaryEntryRepository repository;
     private final DictionaryEntryMapper mapper;
 
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(DictionaryEntryService.class);
+
     public DictionaryEntryService(DictionaryEntryRepository repository, DictionaryEntryMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
@@ -40,10 +42,10 @@ public class DictionaryEntryService {
     @Transactional
     public com.moo.suvankar.gxp.models.DictionaryEntry save(final com.moo.suvankar.gxp.models.DictionaryEntry pojo) {
 
-//        // check if same entry is already present, if so skip insert
-//        if(repository.existsByEntryWord(pojo.getEntryWord())) {
-//            return null;
-//        }
+        // // check if same entry is already present, if so skip insert
+        // if(repository.existsByEntryWord(pojo.getEntryWord())) {
+        // return null;
+        // }
 
         com.moo.suvankar.gxp.data.DictionaryEntry entity = mapper.toEntity(pojo);
         com.moo.suvankar.gxp.data.DictionaryEntry savedEntity = repository.save(entity);
@@ -52,14 +54,19 @@ public class DictionaryEntryService {
 
     @Transactional
     public List<com.moo.suvankar.gxp.models.DictionaryEntry> findEntriesByWord(final String word) {
+        LOG.info("Finding entries for word {}", word);
+
         List<com.moo.suvankar.gxp.data.DictionaryEntry> entityEntries = repository.findByEntryWord(word);
+
+        if (entityEntries.isEmpty() || entityEntries == null) {
+            return null;
+        }
 
         entityEntries.forEach(entry -> Hibernate.initialize(entry.getDefinitions()));
         entityEntries.forEach(entry -> Hibernate.initialize(entry.getPartsOfSpeech()));
         entityEntries.forEach(entry -> Hibernate.initialize(entry.getSynonym()));
         entityEntries.forEach(entry -> Hibernate.initialize(entry.getVerbMorphologyEntries()));
         entityEntries.forEach(entry -> Hibernate.initialize(entry.getQuotes()));
-
 
         List<com.moo.suvankar.gxp.models.DictionaryEntry> pojoEntries = new LinkedList<>();
 

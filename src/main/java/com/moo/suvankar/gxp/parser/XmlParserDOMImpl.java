@@ -18,6 +18,7 @@
 package com.moo.suvankar.gxp.parser;
 
 import com.moo.suvankar.gxp.constants.Abbreviations;
+import com.moo.suvankar.gxp.exceptions.XmlParserException;
 import com.moo.suvankar.gxp.models.Definition;
 import com.moo.suvankar.gxp.models.DictionaryEntry;
 import com.moo.suvankar.gxp.models.Quote;
@@ -70,13 +71,15 @@ public class XmlParserDOMImpl implements XmlParser {
 
             // <hw>
             if (document.getElementsByTagName("hw").getLength() > 0) {
-                String hwTokenValue = document.getElementsByTagName("hw").item(0).getTextContent().replaceAll("\n", " ");
+                String hwTokenValue = document.getElementsByTagName("hw").item(0).getTextContent().replaceAll("\n",
+                        " ");
                 entry.setHeadWord(hwTokenValue);
             }
 
             // <def>
             if (document.getElementsByTagName("def").getLength() > 0) {
-                String defTokenValue = document.getElementsByTagName("def").item(0).getTextContent().replaceAll("\n", " ");
+                String defTokenValue = document.getElementsByTagName("def").item(0).getTextContent().replaceAll("\n",
+                        " ");
                 defTokenValue = defTokenValue.replaceAll("\n", " ");
 
                 Definition definition = new Definition();
@@ -84,7 +87,8 @@ public class XmlParserDOMImpl implements XmlParser {
 
                 // <source>
                 if (document.getElementsByTagName("source").getLength() > 0) {
-                    String sourceTokenValue = document.getElementsByTagName("source").item(0).getTextContent().replaceAll("\n", " ");
+                    String sourceTokenValue = document.getElementsByTagName("source").item(0).getTextContent()
+                            .replaceAll("\n", " ");
                     definition.setSource(sourceTokenValue);
                 }
 
@@ -93,16 +97,19 @@ public class XmlParserDOMImpl implements XmlParser {
 
             // <pos>
             if (document.getElementsByTagName("pos").getLength() > 0) {
-                String posTokenValue = document.getElementsByTagName("pos").item(0).getTextContent().replaceAll("\n", " ");
+                String posTokenValue = document.getElementsByTagName("pos").item(0).getTextContent().replaceAll("\n",
+                        " ");
                 List<String> posAbbrList = List.of(posTokenValue.split("&"));
-                posAbbrList.forEach(abbr -> entry.getPartsOfSpeech().add(Abbreviations.ABBREVIATION_MAP.get(abbr.trim())));
+                posAbbrList
+                        .forEach(abbr -> entry.getPartsOfSpeech().add(Abbreviations.ABBREVIATION_MAP.get(abbr.trim())));
             }
 
             // <syn>
             if (document.getElementsByTagName("syn").getLength() > 0) {
-                String synTokenValue = document.getElementsByTagName("syn").item(0).getTextContent().replaceAll("\n", " ");
+                String synTokenValue = document.getElementsByTagName("syn").item(0).getTextContent().replaceAll("\n",
+                        " ");
 
-                //ignore Syn. --
+                // ignore Syn. --
                 synTokenValue = synTokenValue.replaceAll("Syn. --[ ]*", "");
 
                 entry.getSynonym().getSynonymList().addAll(List.of(synTokenValue.split(",")));
@@ -117,9 +124,11 @@ public class XmlParserDOMImpl implements XmlParser {
                     VerbMorphologyEntry morphologyEntry = new VerbMorphologyEntry();
                     morphologyEntry.setConjugatedForm(vmorphTag.getElementsByTagName("conjf").item(i).getTextContent());
                     if (vmorphTag.getElementsByTagName("pos").getLength() > i) {
-                        String posTokenValue2 = vmorphTag.getElementsByTagName("pos").item(i).getTextContent().replaceAll("\n", " ");
+                        String posTokenValue2 = vmorphTag.getElementsByTagName("pos").item(i).getTextContent()
+                                .replaceAll("\n", " ");
                         List<String> posAbbrList2 = List.of(posTokenValue2.split("&"));
-                        posAbbrList2.forEach(abbr -> morphologyEntry.getPartsOfSpeech().add(Abbreviations.ABBREVIATION_MAP.get(abbr.trim())));
+                        posAbbrList2.forEach(abbr -> morphologyEntry.getPartsOfSpeech()
+                                .add(Abbreviations.ABBREVIATION_MAP.get(abbr.trim())));
                     }
                     entry.getVerbMorphologyEntries().add(morphologyEntry);
                 }
@@ -129,7 +138,7 @@ public class XmlParserDOMImpl implements XmlParser {
 
         } catch (ParserConfigurationException | IOException | SAXException e) {
             LOG.error(xmlData);
-            throw new RuntimeException(e);
+            throw new XmlParserException(e.getMessage(), e);
         }
     }
 
@@ -166,7 +175,7 @@ public class XmlParserDOMImpl implements XmlParser {
             }
         } catch (ParserConfigurationException | IOException | SAXException e) {
             LOG.error(xmlData);
-            throw new RuntimeException(e);
+            throw new XmlParserException(e.getMessage(), e);
         }
     }
 
@@ -187,23 +196,20 @@ public class XmlParserDOMImpl implements XmlParser {
                     definition.setDefinition(
                             document.getElementsByTagName("def").item(0).getTextContent()
                                     .replaceAll("\n", " ")
-                                    .trim()
-                    );
+                                    .trim());
 
                     if (document.getElementsByTagName("mark").getLength() > 0) {
                         definition.setMark(
                                 document.getElementsByTagName("mark").item(0).getTextContent()
                                         .replaceAll("\n", " ")
-                                        .trim()
-                        );
+                                        .trim());
                     }
 
                     if (document.getElementsByTagName("source").getLength() > 0) {
                         definition.setSource(
                                 document.getElementsByTagName("source").item(0).getTextContent()
                                         .replaceAll("\n", " ")
-                                        .trim()
-                        );
+                                        .trim());
                     }
 
                     entry.getDefinitions().add(definition);
@@ -211,7 +217,7 @@ public class XmlParserDOMImpl implements XmlParser {
             }
         } catch (ParserConfigurationException | IOException | SAXException e) {
             LOG.error(xmlData);
-            throw new RuntimeException(e);
+            throw new XmlParserException(e.getMessage(), e);
         }
     }
 
@@ -227,11 +233,10 @@ public class XmlParserDOMImpl implements XmlParser {
             document.getDocumentElement().normalize();
 
             if (document.getElementsByTagName("syn").getLength() > 0) {
-                String synTokenValue
-                        = document.getElementsByTagName("syn").item(0).getTextContent()
+                String synTokenValue = document.getElementsByTagName("syn").item(0).getTextContent()
                         .replaceAll("\n", " ");
 
-                //ignore Syn. --
+                // ignore Syn. --
                 synTokenValue = synTokenValue.replaceAll("Syn. -- ", "")
                         .replaceAll("\\.", "");
 
@@ -244,7 +249,7 @@ public class XmlParserDOMImpl implements XmlParser {
             }
         } catch (ParserConfigurationException | IOException | SAXException e) {
             LOG.error(xmlData);
-            throw new RuntimeException(e);
+            throw new XmlParserException(e.getMessage(), e);
         }
     }
 }

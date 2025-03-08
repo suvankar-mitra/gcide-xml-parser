@@ -17,6 +17,7 @@
 
 package com.moo.suvankar.gxp.services;
 
+import com.moo.suvankar.gxp.exceptions.XmlProcessorException;
 import com.moo.suvankar.gxp.models.DictionaryEntry;
 import com.moo.suvankar.gxp.parser.XmlParser;
 import com.moo.suvankar.gxp.utils.FileReaderUtil;
@@ -40,13 +41,13 @@ public class XmlProcessor {
     private final DictionaryEntryService dbService;
 
     public XmlProcessor(XmlParser xmlParser,
-                        DictionaryEntryService dbService) {
+            DictionaryEntryService dbService) {
         this.xmlParser = xmlParser;
         this.dbService = dbService;
     }
 
     public void processAndPersistXml(String fileName) {
-        LOG.info("Parsing file {}",fileName);
+        LOG.info("Parsing file {}", fileName);
         try {
             String xmlFileContent = FileReaderUtil.readFile(fileName);
 
@@ -67,11 +68,11 @@ public class XmlProcessor {
                 pTagStartCount = countOccurrences(pTagContent, "<p>");
                 pTagEndCount = countOccurrences(pTagContent, "</p>");
 
-//                System.out.println(pTagContent);
-//                System.out.println(pTagStartCount+" "+pTagEndCount);
+                // System.out.println(pTagContent);
+                // System.out.println(pTagStartCount+" "+pTagEndCount);
 
                 // more <p> tag inside <p></p> tag, keep reading
-                while(pTagEndCount != pTagStartCount) {
+                while (pTagEndCount != pTagStartCount) {
                     pTagIndexEnd = xmlFileContent.indexOf("</p>", pTagIndexEnd + 4);
                     pTagContent = xmlFileContent.substring(pTagIndexStart, pTagIndexEnd + 4);
                     pTagStartCount = countOccurrences(pTagContent, "<p>");
@@ -86,13 +87,12 @@ public class XmlProcessor {
                         .replaceAll("(?i)\\{br\\s*/?}", "")
                         .replaceAll("&(?!\\w+;)", "&amp;") // ignore & characters
                         .replaceAll("<cs>", "").replaceAll("</cs>", "")
-                        .replaceAll("<note>", "").replaceAll("</note>", "")
-                ;
+                        .replaceAll("<note>", "").replaceAll("</note>", "");
 
                 Pattern incompleteCommentTagPattern = Pattern.compile("<p>.*?<!--(?!.*?-->).*?</p>",
                         Pattern.DOTALL);
                 Matcher matcher = incompleteCommentTagPattern.matcher(pTagContent);
-                if(matcher.find()) {
+                if (matcher.find()) {
                     pTagIndexStart = pTagIndexEnd;
                     continue;
                 }
@@ -120,12 +120,12 @@ public class XmlProcessor {
             LOG.info("Database persist of {} complete.", fileName);
 
         } catch (IOException | URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new XmlProcessorException(e.getMessage(), e);
         }
     }
 
     private void saveIntoDatabase(List<DictionaryEntry> dictionaryEntries) {
-        for(DictionaryEntry entry : dictionaryEntries) {
+        for (DictionaryEntry entry : dictionaryEntries) {
             dbService.save(entry);
         }
     }
