@@ -36,7 +36,10 @@ public class DatabaseVerifier {
     public void verifyTables() {
         try {
             jdbcTemplate.queryForObject("SELECT COUNT(*) FROM dictionary_entry", Integer.class);
-            LOG.info("✅ Database tables exist.");
+            LOG.info("✅ Table dictionary_entry exist.");
+
+            jdbcTemplate.queryForObject("SELECT COUNT(*) FROM dictionary_users", Integer.class);
+            LOG.info("✅ Table dictionary_users exist.");
         } catch (Exception e) {
             LOG.error("❌ Table not found: {}", e.getMessage());
             throw new RuntimeException(e);
