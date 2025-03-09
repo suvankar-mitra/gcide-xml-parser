@@ -30,7 +30,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Synonym {
-    @ElementCollection 
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "synonyms", joinColumns = @JoinColumn(name = "dictionary_entry_id"))
     @Column(name = "synonym", length = 5000)
     private List<String> synonymList = new LinkedList<>();
