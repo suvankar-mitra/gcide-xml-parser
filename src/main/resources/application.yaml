@@ -4,6 +4,8 @@ spring:
     name: gcide-xml-parser
   profiles:
     active: h2  # Default profile
+  jpa:
+    open-in-view: false
 
 ---
 # H2 profile-specific properties
@@ -18,12 +20,12 @@ spring:
     username: sa
     password: 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    # database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: none
   sql:
     init:
-      mode: never
+      mode: always
       data-locations:
       - classpath:schema-h2.sql
 

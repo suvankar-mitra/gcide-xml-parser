@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS dictionary_entry_parts_of_speech CASCADE;
 DROP TABLE IF EXISTS quote CASCADE;
 DROP TABLE IF EXISTS verb_morphology_entry CASCADE;
 DROP TABLE IF EXISTS verb_morphology_entry_parts_of_speech CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 -----------------------------
 -- Table Definitions
@@ -62,6 +63,14 @@ CREATE TABLE verb_morphology_entry_parts_of_speech (
     parts_of_speech VARCHAR(255)
 );
 
+
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+
 -----------------------------
 -- Foreign Key Constraints
 -----------------------------
@@ -89,3 +98,12 @@ ALTER TABLE verb_morphology_entry_parts_of_speech
     ADD CONSTRAINT fk_verb_morph_parts_of_speech
     FOREIGN KEY (verb_morphology_entry_id)
     REFERENCES verb_morphology_entry;
+
+
+
+-----------------------------
+-- Initial Data
+-----------------------------
+
+INSERT INTO users (username, password) VALUES ('admin', 'admin@123');
+INSERT INTO users (username, password) VALUES ('user', 'user@123');

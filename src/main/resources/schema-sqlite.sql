@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS quote;
 DROP TABLE IF EXISTS verb_morphology_entry_parts_of_speech;
 DROP TABLE IF EXISTS verb_morphology_entry;
 DROP TABLE IF EXISTS synonyms;
+DROP TABLE IF EXISTS users;
 
 -----------------------------
 -- Table Definitions
@@ -75,3 +76,9 @@ CREATE TABLE verb_morphology_entry_parts_of_speech (
 );
 
 CREATE INDEX idx_verb_morphology_entry_parts_of_speech_verb_morphology_entry_id ON verb_morphology_entry_parts_of_speech(verb_morphology_entry_id);
+
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
