@@ -43,6 +43,7 @@ public class ParserController {
             } else {
                 xmlProcessor.processAndPersistXml(file);
             }
+            LOG.info("Parsing completed");
         } catch (Exception e) {
             LOG.error("Fatal error {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(HttpStatus.INTERNAL_SERVER_ERROR);
