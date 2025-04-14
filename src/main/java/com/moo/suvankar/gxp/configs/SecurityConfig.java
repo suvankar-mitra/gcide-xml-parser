@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/parse").hasRole("ADMIN")
                         .requestMatchers("/actuator/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/definitions").permitAll()
-                        .requestMatchers("/api/v1/endpoints").permitAll()
+                        .requestMatchers("/endpoints").permitAll()
                         .anyRequest().denyAll())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
