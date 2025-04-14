@@ -32,10 +32,10 @@ import com.moo.suvankar.gxp.services.CustomUserDetailsService;
 @Configuration
 public class AdminUserInitializationConfig {
 
-    @Value("${admin.user:admin}")
+    @Value("${admin_user:admin}")
     private String adminUser;
 
-    @Value("${admin.password:admin}")
+    @Value("${admin_password:admin}")
     private String adminPassword;
 
     @Autowired
@@ -51,8 +51,8 @@ public class AdminUserInitializationConfig {
         return args -> {
             Users user = new Users();
 
-            adminUser = env.getProperty("admin.user");
-            adminPassword = env.getProperty("admin.password");
+            adminUser = env.getProperty("admin_user");
+            adminPassword = env.getProperty("admin_password");
 
             if (adminUser == null || adminPassword == null) {
                 LOG.error("Admin user or password not found in application.properties or Environment variables");
