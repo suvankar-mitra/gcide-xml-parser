@@ -1,16 +1,19 @@
-PRAGMA journal_mode=WAL;
+-- for concurrency
+PRAGMA journal_mode = WAL;
+
+-- SQLite equivalent of schema-h2.sql
 
 -----------------------------
 -- Cleanup: Drop existing tables
 -----------------------------
 DROP TABLE IF EXISTS definition;
-DROP TABLE IF EXISTS dictionary_entry_parts_of_speech;
-DROP TABLE IF EXISTS dictionary_entry;
-DROP TABLE IF EXISTS quote;
-DROP TABLE IF EXISTS verb_morphology_entry_parts_of_speech;
-DROP TABLE IF EXISTS verb_morphology_entry;
 DROP TABLE IF EXISTS synonyms;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS dictionary_entry;
+DROP TABLE IF EXISTS dictionary_entry_parts_of_speech;
+DROP TABLE IF EXISTS quote;
+DROP TABLE IF EXISTS verb_morphology_entry;
+DROP TABLE IF EXISTS verb_morphology_entry_parts_of_speech;
+DROP TABLE IF EXISTS dictionary_users;
 
 -----------------------------
 -- Table Definitions
@@ -28,15 +31,11 @@ CREATE TABLE synonyms (
     FOREIGN KEY (dictionary_entry_id) REFERENCES dictionary_entry(id)
 );
 
-CREATE INDEX idx_synonyms_dictionary_entry_id ON synonyms(dictionary_entry_id);
-
 CREATE TABLE dictionary_entry_parts_of_speech (
     dictionary_entry_id INTEGER,
     parts_of_speech TEXT,
     FOREIGN KEY (dictionary_entry_id) REFERENCES dictionary_entry(id)
 );
-
-CREATE INDEX idx_dictionary_entry_parts_of_speech_dictionary_entry_id ON dictionary_entry_parts_of_speech(dictionary_entry_id);
 
 CREATE TABLE definition (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,8 +46,6 @@ CREATE TABLE definition (
     FOREIGN KEY (dictionary_entry_id) REFERENCES dictionary_entry(id)
 );
 
-CREATE INDEX idx_definition_dictionary_entry_id ON definition(dictionary_entry_id);
-
 CREATE TABLE quote (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     dictionary_entry_id INTEGER,
@@ -58,8 +55,6 @@ CREATE TABLE quote (
     FOREIGN KEY (dictionary_entry_id) REFERENCES dictionary_entry(id)
 );
 
-CREATE INDEX idx_quote_dictionary_entry_id ON quote(dictionary_entry_id);
-
 CREATE TABLE verb_morphology_entry (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     dictionary_entry_id INTEGER,
@@ -67,18 +62,20 @@ CREATE TABLE verb_morphology_entry (
     FOREIGN KEY (dictionary_entry_id) REFERENCES dictionary_entry(id)
 );
 
-CREATE INDEX idx_verb_morphology_entry_dictionary_entry_id ON verb_morphology_entry(dictionary_entry_id);
-
 CREATE TABLE verb_morphology_entry_parts_of_speech (
     verb_morphology_entry_id INTEGER,
     parts_of_speech TEXT,
     FOREIGN KEY (verb_morphology_entry_id) REFERENCES verb_morphology_entry(id)
 );
 
-CREATE INDEX idx_verb_morphology_entry_parts_of_speech_verb_morphology_entry_id ON verb_morphology_entry_parts_of_speech(verb_morphology_entry_id);
-
-CREATE TABLE users (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+CREATE TABLE dictionary_users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    role TEXT DEFAULT 'USER'
 );
+
+-----------------------------
+-- Enable Foreign Key Constraints
+-----------------------------
+PRAGMA foreign_keys = ON;
